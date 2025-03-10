@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
 using TMPro;
 
 public class RSVPForm01 : MonoBehaviour
@@ -33,6 +35,22 @@ public class RSVPForm01 : MonoBehaviour
     private string _preview;
     private string _attendance;
     private string _attendType;
+
+    // Game Object -  Scripts
+    public GameObject dttClassification;
+    public GameObject dttMajor;
+    public GameObject dttPathway;
+    public GameObject dttFirstCA;
+    public GameObject dttAttendance;
+    public GameObject dttAttendType;
+
+    // Text
+    public TMP_Text classificationText;
+    public TMP_Text majorText;
+    public TMP_Text pathwayText;
+    public TMP_Text firstCAText;
+    public TMP_Text attendanceText;
+    public TMP_Text attendTypeText;
 
 
     private static string base_url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScT8aoM3y-KVmp1gKHgW98lGG4CSUouD0DPnK32nBKt4tq54Q/formResponse";
@@ -76,18 +94,24 @@ public class RSVPForm01 : MonoBehaviour
         _firstName = firstNameInputField.text;
         _lastName = lastNameInputField.text;
         _ucfEmail = ucfEmailInputField.text;
-        _classification = classificationDropdown.text;
-        _major = majorDropdown.text;
+        //_classification = dttClassification.GetComponent<DropdownToText_Classification>().classificationDropdownText;
+        _classification = classificationText.text;
+        //_major = dttMajor.GetComponent<DropdownToText_Major>().majorDropdownText;
+        _major = majorText.text;
         _majorEngineering = majorEngineeringInputField.text;
 
         //Page 2
-        _pathway = pathwayDropdown.text;
-        _firstCA = firstCADropdown.text;
+        //_pathway = dttPathway.GetComponent<DropdownToText_Pathway>().pathwayDropdownText;
+        _pathway = pathwayText.text;
+        //_firstCA = dttFirstCA.GetComponent<DropdownToText_FirstCA>().firstCADropdownText;
+        _firstCA = firstCAText.text;
         _preview = previewInputField.text;
-        _attendance = attendanceDropdown.text;
-        _attendType = attendTypeDropdown.text;
+        //_attendance = dttAttendance.GetComponent<DropdownToText_Attendance>().attendanceDropdownText;
+        _attendance = attendanceText.text;
+        //_attendType = dttAttendType.GetComponent<DropdownToText_AttendType>().attendTypeDropdownText;
+        _attendType = attendTypeText.text;
 
-        StartCoroutine(Post(_firstName, _lastName, _ucfEmail, _classification, _major, _majorEngineering, _pathway, _firstCA, _preview, _attendance, _attendType));
+        StartCoroutine(Post());
     }
 
     private IEnumerator Post()
@@ -109,7 +133,7 @@ public class RSVPForm01 : MonoBehaviour
         form.AddField(attendance_Field, _attendance);
         form.AddField(attendType_Field, _attendType);
 
-        using UNityWebRequest www = UnityWebRequest.Post(base_url, form);
+        using UnityWebRequest www = UnityWebRequest.Post(base_url, form);
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.ConnectionError)
